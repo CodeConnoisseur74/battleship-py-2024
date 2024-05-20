@@ -62,6 +62,7 @@
    "chat.editor.fontWeight": "ComicShannsMono Nerd Font Mono",
    "ruff.lineLength": 79,
    "editor.codeActionsOnSave": {
-      
+
    },
+   "workbench.iconTheme": "hotline-technicolor",
 }
