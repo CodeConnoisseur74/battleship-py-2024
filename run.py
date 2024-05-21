@@ -1,10 +1,8 @@
-import sys
-
 import random
-from colorama import Fore, Style, init
-
-# import string
+import sys
 import types
+
+from colorama import Fore, Style, init
 
 # Initialize colorama
 init()
@@ -250,19 +248,24 @@ def start_game():
                     player_shot_valid = True
 
                 # Check for hit or miss
-                if computer_board[y][x] != Fore.CYAN + "O" + Style.RESET_ALL:
+                if computer_board[y][x] != consts.CHAR_WATER:
                     print("Hit!")
-                    computer_board[y][x] = Fore.RED + "X" + Style.RESET_ALL
+                    computer_board[y][x] = consts.CHAR_HIT
                 else:
                     print("Miss!")
-                    computer_board[y][x] = Fore.WHITE + "-" + Style.RESET_ALL
+                    computer_board[y][x] = consts.CHAR_MISS
 
                 # Check if player has won
                 if all(
-                    Fore.RED + "X" + Style.RESET_ALL in cell
+                    consts.CHAR_HIT in cell
                     for row in computer_board
                     for cell in row
-                    if cell.startswith(Fore.YELLOW)
+                    if cell
+                    not in [
+                        consts.CHAR_WATER,
+                        consts.CHAR_MISS,
+                        consts.CHAR_HIT,
+                    ]
                 ):
                     print_board(player_board, computer_board)
                     print("Congratulations! You won!")
@@ -289,37 +292,38 @@ def start_game():
                     )
 
             # Check for hit or miss
-            if (
-                player_board[y][x]
-                != Fore.CYAN + consts.CHAR_WATER + Style.RESET_ALL
-            ):
-                print(
-                    "Computer hit your ship "
-                    + convert_numeric_to_alphabetic(y)
-                    + str(x)
-                    + "!"
-                )
-                player_board[y][x] = consts.CHAR_HIT
-            else:
-                print(
-                    "Computer missed "
-                    + convert_numeric_to_alphabetic(y)
-                    + str(x)
-                    + "!"
-                )
-                player_board[y][x] = consts.CHAR_MISS
+        if player_board[y][x] not in [
+            consts.CHAR_WATER,
+            consts.CHAR_HIT,
+            consts.CHAR_MISS,
+        ]:
+            print(
+                "Computer hit your ship at "
+                + convert_numeric_to_alphabetic(y)
+                + str(x)
+                + "!"
+            )
+            player_board[y][x] = consts.CHAR_HIT
+        else:
+            print(
+                "Computer missed at "
+                + convert_numeric_to_alphabetic(y)
+                + str(x)
+                + "!"
+            )
+            player_board[y][x] = consts.CHAR_MISS
 
-            # Check if computer has won
-            if all(
-                consts.CHAR_HIT in cell
-                for row in player_board
-                for cell in row
-                if cell
-                not in [consts.CHAR_WATER, consts.CHAR_MISS, consts.CHAR_HIT]
-            ):
-                print_board(player_board, computer_board)
-                print("Game Over! Computer won!")
-                sys.exit()
+        # Check if computer has won
+        if all(
+            consts.CHAR_HIT in cell
+            for row in player_board
+            for cell in row
+            if cell
+            not in [consts.CHAR_WATER, consts.CHAR_MISS, consts.CHAR_HIT]
+        ):
+            print_board(player_board, computer_board)
+            print("Game Over! Computer won!")
+            sys.exit()
 
 
 # If the program is run (instead of imported), run the game:
