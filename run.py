@@ -75,8 +75,18 @@ def place_ships(board):
                         break
                 if valid:
                     for i in range(length):
+                        board[y][x + i] = ship[0]
+                    placed = True
+            elif orientation == "vertical" and y + length <= consts.BOARD_SIZE:
+                valid = True
+                for i in range(length):
+                    if board[y + i][x] != consts.CHAR_WATER:
+                        valid = False
+                        break
+                if valid:
+                    for i in range(length):
                         board[y + i][x] = ship[0]
-                        placed = True
+                    placed = True
 
 
 # Function to display game rules
