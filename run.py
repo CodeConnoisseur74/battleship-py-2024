@@ -193,7 +193,7 @@ def start_game():
 
     # Initialize used coordinates list
     used_coordinates = []
-    # used_coordinates_computer = []
+    used_coordinates_computer = []
 
     # Game loop
     while True:
@@ -270,3 +270,58 @@ def start_game():
 
             except ValueError as e:
                 print(e)
+
+            # Computer's move
+            print("Computer's Move")
+            computer_shot_valid = False
+            while not computer_shot_valid:
+                x, y = (
+                    random.randint(0, consts.BOARD_SIZE - 1),
+                    random.randint(0, consts.BOARD_SIZE - 1),
+                )
+                if (x, y) not in used_coordinates_computer:
+                    used_coordinates_computer.append((x, y))
+                    computer_shot_valid = True
+                    print(
+                        f"""
+                        Computer targeted {convert_numeric_to_alphabetic(y)}{x}
+                        """
+                    )
+
+            # Check for hit or miss
+            if (
+                player_board[y][x]
+                != Fore.CYAN + consts.CHAR_WATER + Style.RESET_ALL
+            ):
+                print(
+                    "Computer hit your ship "
+                    + convert_numeric_to_alphabetic(y)
+                    + str(x)
+                    + "!"
+                )
+                player_board[y][x] = consts.CHAR_HIT
+            else:
+                print(
+                    "Computer missed "
+                    + convert_numeric_to_alphabetic(y)
+                    + str(x)
+                    + "!"
+                )
+                player_board[y][x] = consts.CHAR_MISS
+
+            # Check if computer has won
+            if all(
+                consts.CHAR_HIT in cell
+                for row in player_board
+                for cell in row
+                if cell
+                not in [consts.CHAR_WATER, consts.CHAR_MISS, consts.CHAR_HIT]
+            ):
+                print_board(player_board, computer_board)
+                print("Game Over! Computer won!")
+                sys.exit()
+
+
+# If the program is run (instead of imported), run the game:
+if __name__ == "__main__":
+    main()
