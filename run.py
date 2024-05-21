@@ -192,5 +192,136 @@ def start_game():
     place_ships(computer_board)
 
     # Initialize used coordinates list
-    # used_coordinates = []
-    # used_coordinates_computer = []
+    used_coordinates = []
+    used_coordinates_computer = []
+
+    # Game loop
+    while True:
+        print_board(player_board, computer_board)
+
+        # Player's Move
+        print("Player's Move")
+        player_shot_valid = False
+        while not player_shot_valid:
+            try:
+                y_input = (
+                    input("Enter y-coordinate (A-J): or 'Exit' to quit: ")
+                    .strip()
+                    .upper()
+                )
+                if y_input == "EXIT":
+                    print("Thanks for playing Battleship!")
+                    sys.exit()
+
+                # Validate the y-coordinate input
+                if len(y_input) == 1 and "A" <= y_input <= "J":
+                    y = convert_alphabetic_to_numeric(y_input)
+                else:
+                    print(
+                        """
+                        Please enter a single letter from A to J for
+                        the y-coordinate.
+                        """
+                    )
+                    continue
+
+                x_input = (
+                    input("Enter x-coordinate (0-9): or type 'exit' to quit: ")
+                    .strip()
+                    .upper()
+                )
+                if x_input == "EXIT":
+                    print("Thanks for playing Battleship!")
+                    sys.exit()
+                try:
+                    x = int(x_input)
+                except ValueError:
+                    print(
+                        """
+                        Invalid x-coordinate. Please enter a number
+                        from 0 to 9.
+                        """
+                    )
+                    continue
+
+                # Check if x-coordinate is valid
+                if is_valid_position(x, y) and (x, y) not in used_coordinates:
+                    used_coordinates.append((x, y))  # Record the shot
+                    player_shot_valid = True
+
+                # Check for hit or miss
+                if computer_board[y][x] != Fore.CYAN + "O" + Style.RESET_ALL:
+                    print("Hit!")
+                    computer_board[y][x] = Fore.RED + "X" + Style.RESET_ALL
+                else:
+                    print("Miss!")
+                    computer_board[y][x] = Fore.WHITE + "-" + Style.RESET_ALL
+
+                # Check if player has won
+                if all(
+                    Fore.RED + "X" + Style.RESET_ALL in cell
+                    for row in computer_board
+                    for cell in row
+                    if cell.startswith(Fore.YELLOW)
+                ):
+                    print_board(player_board, computer_board)
+                    print("Congratulations! You won!")
+                    sys.exit()
+
+            except ValueError as e:
+                print(e)
+
+            # Computer's move
+            print("Computer's Move")
+            computer_shot_valid = False
+            while not computer_shot_valid:
+                x, y = (
+                    random.randint(0, consts.BOARD_SIZE - 1),
+                    random.randint(0, consts.BOARD_SIZE - 1),
+                )
+                if (x, y) not in used_coordinates_computer:
+                    used_coordinates_computer.append((x, y))
+                    computer_shot_valid = True
+                    print(
+                        f"""
+                        Computer targeted {convert_numeric_to_alphabetic(y)}{x}
+                        """
+                    )
+
+            # Check for hit or miss
+            if (
+                player_board[y][x]
+                != Fore.CYAN + consts.CHAR_WATER + Style.RESET_ALL
+            ):
+                print(
+                    "Computer hit your ship "
+                    + convert_numeric_to_alphabetic(y)
+                    + str(x)
+                    + "!"
+                )
+                player_board[y][x] = consts.CHAR_HIT
+            else:
+                print(
+                    "Computer missed "
+                    + convert_numeric_to_alphabetic(y)
+                    + str(x)
+                    + "!"
+                )
+                player_board[y][x] = consts.CHAR_MISS
+
+            # Check if computer has won
+            if all(
+                consts.CHAR_HIT in cell
+                for row in player_board
+                for cell in row
+                if cell
+                not in [consts.CHAR_WATER, consts.CHAR_MISS, consts.CHAR_HIT]
+            ):
+                print_board(player_board, computer_board)
+                print("Game Over! Computer won!")
+                sys.exit()
+
+
+# If the program is run (instead of imported), run the game:
+if __name__ == "__main__":
+    main()
