@@ -68,4 +68,5 @@
    "evenBetterToml.formatter.allowedBlankLines": 1,
    "evenBetterToml.formatter.columnWidth": 1,
    "code-runner.clearPreviousOutput": true,
+   "glassit-linux.opacity": 80,
 }
