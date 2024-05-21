@@ -192,5 +192,81 @@ def start_game():
     place_ships(computer_board)
 
     # Initialize used coordinates list
-    # used_coordinates = []
+    used_coordinates = []
     # used_coordinates_computer = []
+
+    # Game loop
+    while True:
+        print_board(player_board, computer_board)
+
+        # Player's Move
+        print("Player's Move")
+        player_shot_valid = False
+        while not player_shot_valid:
+            try:
+                y_input = (
+                    input("Enter y-coordinate (A-J): or 'Exit' to quit: ")
+                    .strip()
+                    .upper()
+                )
+                if y_input == "EXIT":
+                    print("Thanks for playing Battleship!")
+                    sys.exit()
+
+                # Validate the y-coordinate input
+                if len(y_input) == 1 and "A" <= y_input <= "J":
+                    y = convert_alphabetic_to_numeric(y_input)
+                else:
+                    print(
+                        """
+                        Please enter a single letter from A to J for
+                        the y-coordinate.
+                        """
+                    )
+                    continue
+
+                x_input = (
+                    input("Enter x-coordinate (0-9): or type 'exit' to quit: ")
+                    .strip()
+                    .upper()
+                )
+                if x_input == "EXIT":
+                    print("Thanks for playing Battleship!")
+                    sys.exit()
+                try:
+                    x = int(x_input)
+                except ValueError:
+                    print(
+                        """
+                        Invalid x-coordinate. Please enter a number
+                        from 0 to 9.
+                        """
+                    )
+                    continue
+
+                # Check if x-coordinate is valid
+                if is_valid_position(x, y) and (x, y) not in used_coordinates:
+                    used_coordinates.append((x, y))  # Record the shot
+                    player_shot_valid = True
+
+                # Check for hit or miss
+                if computer_board[y][x] != Fore.CYAN + "O" + Style.RESET_ALL:
+                    print("Hit!")
+                    computer_board[y][x] = Fore.RED + "X" + Style.RESET_ALL
+                else:
+                    print("Miss!")
+                    computer_board[y][x] = Fore.WHITE + "-" + Style.RESET_ALL
+
+                # Check if player has won
+                if all(
+                    Fore.RED + "X" + Style.RESET_ALL in cell
+                    for row in computer_board
+                    for cell in row
+                    if cell.startswith(Fore.YELLOW)
+                ):
+                    print_board(player_board, computer_board)
+                    print("Congratulations! You won!")
+                    sys.exit()
+
+            except ValueError as e:
+                print(e)
