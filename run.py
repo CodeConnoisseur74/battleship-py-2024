@@ -117,6 +117,11 @@ def print_board(player_board, computer_board):
         )
 
 
+# Function to check if a position is valid on the board
+def is_valid_position(x, y):
+    return 0 <= x < consts.BOARD_SIZE and 0 <= y < consts.BOARD_SIZE
+
+
 # Function to display game rules
 def display_rules():
     rules = """
