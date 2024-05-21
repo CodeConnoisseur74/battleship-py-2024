@@ -89,6 +89,39 @@ def place_ships(board):
                     placed = True
 
 
+# Function to print the player and computer boards side by side
+def print_board(player_board, computer_board):
+    print("Player's Board    Computer's Board")
+    print(
+        "  "
+        + " ".join(str(i) for i in range(consts.BOARD_SIZE))
+        + "       "
+        + " ".join(str(i) for i in range(consts.BOARD_SIZE))
+    )
+    for i, (player_row, computer_row) in enumerate(
+        zip(player_board, computer_board)
+    ):
+        player_row_display = [format_cell(cell, True) for cell in player_row]
+        computer_row_display = [
+            format_cell(cell, False) for cell in computer_row
+        ]
+
+        print(
+            convert_numeric_to_alphabetic(i)
+            + " "
+            + " ".join(player_row_display)
+            + "     "
+            + convert_numeric_to_alphabetic(i)
+            + " "
+            + " ".join(computer_row_display)
+        )
+
+
+# Function to check if a position is valid on the board
+def is_valid_position(x, y):
+    return 0 <= x < consts.BOARD_SIZE and 0 <= y < consts.BOARD_SIZE
+
+
 # Function to display game rules
 def display_rules():
     rules = """
