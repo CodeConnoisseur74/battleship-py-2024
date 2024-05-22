@@ -74,6 +74,9 @@ def place_ships(board):
                 if valid:
                     for i in range(length):
                         board[y][x + i] = ship[0]
+                    print(
+                        f"Placed {ship} horizontally at ({x}, {y})"
+                    )  # Debug statement
                     placed = True
             elif orientation == "vertical" and y + length <= consts.BOARD_SIZE:
                 valid = True
@@ -84,6 +87,9 @@ def place_ships(board):
                 if valid:
                     for i in range(length):
                         board[y + i][x] = ship[0]
+                        print(
+                            f"Placed {ship} vertically at ({x}, {y})"
+                        )  # Debug statement
                     placed = True
 
 
