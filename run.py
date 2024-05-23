@@ -77,9 +77,6 @@ def place_ships(board):
                 if valid:
                     for i in range(length):
                         board[y][x + i] = ship[0]
-                    print(
-                        f"Placed {ship} horizontally at ({x}, {y})"
-                    )  # Debug statement
                     placed = True
 
             elif orientation == "vertical" and y + length <= consts.BOARD_SIZE:
@@ -91,9 +88,6 @@ def place_ships(board):
                 if valid:
                     for i in range(length):
                         board[y + i][x] = ship[0]
-                    print(
-                        f"Placed {ship} vertically at ({x}, {y})"
-                    )  # Debug statement
                     placed = True
 
         if not placed:
@@ -160,9 +154,7 @@ def start_game():
     computer_board = initialize_board()
 
     # Place ships on the board
-    print("Placing ships on player's board...")
     place_ships(player_board)
-    print("Placing ships on computer's board...")
     place_ships(computer_board)
 
     # Initialize used coordinates list
@@ -283,8 +275,8 @@ def start_game():
                     computer_shot_valid = True
                     print(
                         f"""
-                        Computer targeted {convert_numeric_to_alphabetic(y)}{x}
-                        """
+                Computer targeted {convert_numeric_to_alphabetic(y)}{x}
+                """
                     )
 
             # Check for hit or miss
@@ -294,12 +286,16 @@ def start_game():
                 consts.CHAR_MISS,
             ]:
                 print(
-                    f"Computer hit your ship at {convert_numeric_to_alphabetic(y)}{x}!"
+                    f"""
+            Computer hit your ship at{convert_numeric_to_alphabetic(y)}{x}!
+            """
                 )
                 player_board[y][x] = consts.CHAR_HIT
             else:
                 print(
-                    f"Computer missed at {convert_numeric_to_alphabetic(y)}{x}!"
+                    f"""
+            Computer missed at {convert_numeric_to_alphabetic(y)}{x}!
+            """
                 )
                 player_board[y][x] = consts.CHAR_MISS
 
@@ -325,8 +321,10 @@ def display_rules():
     2. Each player has a fleet of 5 ships to place on their board.
         The ships are: Aircraft Carrier (5), Battleship (4), Submarine (3),
         Destroyer (3), and Patrol Boat (2).
-    3. Players take turns guessing the coordinates to attack on the opponent's board.
-    4. If a player's guess hits a ship, it's a "Hit!" and the opponent marks it as such.
+    3. Players take turns guessing the coordinates to attack on the opponent's
+        board.
+    4. If a player's guess hits a ship, it's a "Hit!" and the opponent marks
+        it as such.
         If it misses, it's a "Miss!" and the opponent marks it as such.
     5. The first player to sink all of the opponent's ships wins the game.
 
