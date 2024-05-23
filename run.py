@@ -42,7 +42,7 @@ def format_cell(cell: str, show_ships) -> str:
             return Fore.CYAN + cell + Style.RESET_ALL
         case _:
             return (
-                Fore.YELLOW + cell + Style.RESET_ALL
+                Fore.BLUE + cell + Style.RESET_ALL
                 if show_ships
                 else Fore.CYAN + consts.CHAR_WATER + Style.RESET_ALL
             )
