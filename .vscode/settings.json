@@ -70,4 +70,7 @@
    "autoDocstring.startOnNewLine": true,
    "terminal.integrated.mouseWheelZoom": true,
    "editor.defaultFormatter": "charliermarsh.ruff",
+   "[html]": {
+      "editor.defaultFormatter": "vscode.html-language-features"
+   },
 }
