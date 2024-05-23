@@ -29,9 +29,6 @@
    ],
    "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
    "editor.guides.bracketPairs": "active",
-   "ruff.format.args": [
-      "line-length = 79"
-   ],
    "[python]": {
       "editor.formatOnSave": true,
       "editor.formatOnPaste": true,
@@ -60,14 +57,17 @@
    "notebook.output.fontFamily": "ComicShannsMono Nerd Font Mono",
    "chat.editor.fontFamily": "ComicShannsMono Nerd Font Mono",
    "chat.editor.fontWeight": "ComicShannsMono Nerd Font Mono",
-   "ruff.lineLength": 79,
-   "editor.codeActionsOnSave": {
-
-   },
+   "editor.codeActionsOnSave": {},
    "workbench.iconTheme": "hotline-technicolor",
    "evenBetterToml.formatter.allowedBlankLines": 1,
    "evenBetterToml.formatter.columnWidth": 1,
    "code-runner.clearPreviousOutput": true,
    "glassit-linux.opacity": 90,
    "editor.minimap.enabled": true,
+   "python.analysis.inlayHints.callArgumentNames": "off",
+   "ruff.showNotifications": "always",
+   "editor.formatOnType": false,
+   "autoDocstring.startOnNewLine": true,
+   "terminal.integrated.mouseWheelZoom": true,
+   "editor.defaultFormatter": "charliermarsh.ruff",
 }

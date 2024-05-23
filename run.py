@@ -61,10 +61,13 @@ def initialize_board():
 def place_ships(board):
     for ship, length in consts.SHIP_TYPES.items():
         placed = False
-        while not placed:
+        attempts = 0  # Keep track of the number of attempts to place each ship
+        while not placed and attempts < 100:  # Let's avoid infinite loops
+            attempts += 1
             x = random.randint(0, consts.BOARD_SIZE - 1)
             y = random.randint(0, consts.BOARD_SIZE - 1)
             orientation = random.choice(["horizontal", "vertical"])
+
             if orientation == "horizontal" and x + length <= consts.BOARD_SIZE:
                 valid = True
                 for i in range(length):
@@ -78,6 +81,7 @@ def place_ships(board):
                         f"Placed {ship} horizontally at ({x}, {y})"
                     )  # Debug statement
                     placed = True
+
             elif orientation == "vertical" and y + length <= consts.BOARD_SIZE:
                 valid = True
                 for i in range(length):
@@ -87,15 +91,32 @@ def place_ships(board):
                 if valid:
                     for i in range(length):
                         board[y + i][x] = ship[0]
-                        print(
-                            f"Placed {ship} vertically at ({x}, {y})"
-                        )  # Debug statement
+                    print(
+                        f"Placed {ship} vertically at ({x}, {y})"
+                    )  # Debug statement
                     placed = True
+
+        if not placed:
+            print(f"Failed to place {ship} after {attempts} attempts.")
+
+
+# Check if the placement is correct
+def count_ships(board):
+    ship_count = {}
+    for row in board:
+        for cell in row:
+            if cell not in [
+                consts.CHAR_WATER,
+                consts.CHAR_HIT,
+                consts.CHAR_MISS,
+            ]:
+                ship_count[cell] = ship_count.get(cell, 0) + 1
+    return ship_count
 
 
 # Function to print the player and computer boards side by side
 def print_board(player_board, computer_board):
-    print("Player's Board    Computer's Board")
+    print("  Player's Board            Computer's Board")
     print(
         "  "
         + " ".join(str(i) for i in range(consts.BOARD_SIZE))
@@ -121,68 +142,15 @@ def print_board(player_board, computer_board):
         )
 
 
+def print_initial_board(board):
+    for row in board:
+        print(" ".join(row))
+    print("\n" + "-" * 20 + "\n")
+
+
 # Function to check if a position is valid on the board
 def is_valid_position(x, y):
     return 0 <= x < consts.BOARD_SIZE and 0 <= y < consts.BOARD_SIZE
-
-
-# Function to display game rules
-def display_rules():
-    rules = """
-    BATTLESHIP GAME RULES:
-
-    1. The game is played on a 10x10 grid.
-    2. Each player has a fleet of 5 ships to place on their board.
-        The ships are: Aircraft Carrier (5), Battleship (4), Submarine (3),
-        Destroyer (3), and Patrol Boat (2).
-    3. Players take turns guessing the coordinates to attack on the opponent's board.
-    4. If a player's guess hits a ship, it's a "Hit!" and the opponent marks it as such.
-        If it misses, it's a "Miss!" and the opponent marks it as such.
-    5. The first player to sink all of the opponent's ships wins the game.
-
-    Have fun playing Battleship!
-    """  # noqa violation_error
-
-    print(rules)
-
-
-# Function to show the start menu
-def show_start_menu():
-    print(
-        r"""
-   ____              __    __    ___                   __
-  /\  _`\           /\ \__/\ \__/\_ \                 /\ \      __
-  \ \ \L\ \     __  \ \ ,_\ \ ,_\//\ \      __    ____\ \ \___ /\_\  _____
-   \ \  _ <'  /'__`\ \ \ \/\ \ \/ \ \ \   /'__`\ /',__\\ \  _ `\/\ \/\ '__`\
-    \ \ \L\ \/\ \L\.\_\ \ \_\ \ \_ \_\ \_/\  __//\__, `\\ \ \ \ \ \ \ \ \L\ \\
-     \ \____/\ \__/.\_\\ \__\\ \__\/\____\ \____\/\____/ \ \_\ \_\ \_\ \ ,__/
-      \/___/  \/__/\/_/ \/__/ \/__/\/____/\/____/\/___/   \/_/\/_/\/_/\ \ \/
-                                                                       \ \_\
-
-        Welcome to Battleship!
-
-        1. Start Game
-        2. Rules
-        3. Exit
-    """  # noqa violation_error
-    )
-
-
-# Main Menu
-def main():
-    show_start_menu()
-    while True:
-        choice = input("Enter your choice: ")
-
-        if choice == "1":
-            start_game()
-        elif choice == "2":
-            display_rules()
-        elif choice == "3":
-            print("Thanks for playing Battleship!")
-            sys.exit()
-        else:
-            print("Invalid choice. Try again.")
 
 
 # Function to start the game
@@ -192,7 +160,9 @@ def start_game():
     computer_board = initialize_board()
 
     # Place ships on the board
+    print("Placing ships on player's board...")
     place_ships(player_board)
+    print("Placing ships on computer's board...")
     place_ships(computer_board)
 
     # Initialize used coordinates list
@@ -248,20 +218,40 @@ def start_game():
                     )
                     continue
 
-                # Check if x-coordinate is valid
-                if is_valid_position(x, y) and (x, y) not in used_coordinates:
-                    used_coordinates.append((x, y))  # Record the shot
-                    player_shot_valid = True
+                if not is_valid_position(x, y):
+                    print("Coordinates out of bounds. Try again.")
+                    continue
 
-                # Check for hit or miss
+                if (x, y) in used_coordinates:
+                    print(
+                        """
+                        You have already used this coordinate.
+                        Try a different one.
+                        """
+                    )
+                    continue
+
+                used_coordinates.append((x, y))
+                player_shot_valid = True
+
                 if computer_board[y][x] != consts.CHAR_WATER:
-                    print("Hit!")
-                    computer_board[y][x] = consts.CHAR_HIT
+                    if computer_board[y][x] not in [
+                        consts.CHAR_HIT,
+                        consts.CHAR_MISS,
+                    ]:
+                        print("Hit!")
+                        computer_board[y][x] = consts.CHAR_HIT
+                    else:
+                        print(
+                            """
+                            Coordinate already targeted.
+                            Choose different coordinates.
+                            """
+                        )
                 else:
                     print("Miss!")
                     computer_board[y][x] = consts.CHAR_MISS
 
-                # Check if player has won
                 if all(
                     consts.CHAR_HIT in cell
                     for row in computer_board
@@ -324,6 +314,65 @@ def start_game():
                 print_board(player_board, computer_board)
                 print("Game Over! Computer won!")
                 sys.exit()
+
+
+# Function to display game rules
+def display_rules():
+    rules = """
+    BATTLESHIP GAME RULES:
+
+    1. The game is played on a 10x10 grid.
+    2. Each player has a fleet of 5 ships to place on their board.
+        The ships are: Aircraft Carrier (5), Battleship (4), Submarine (3),
+        Destroyer (3), and Patrol Boat (2).
+    3. Players take turns guessing the coordinates to attack on the opponent's board.
+    4. If a player's guess hits a ship, it's a "Hit!" and the opponent marks it as such.
+        If it misses, it's a "Miss!" and the opponent marks it as such.
+    5. The first player to sink all of the opponent's ships wins the game.
+
+    Have fun playing Battleship!
+    """  # noqa violation_error
+
+    print(rules)
+
+
+# Function to show the start menu
+def show_start_menu():
+    print(
+        r"""
+   ____              __    __    ___                   __
+  /\  _`\           /\ \__/\ \__/\_ \                 /\ \      __
+  \ \ \L\ \     __  \ \ ,_\ \ ,_\//\ \      __    ____\ \ \___ /\_\  _____
+   \ \  _ <'  /'__`\ \ \ \/\ \ \/ \ \ \   /'__`\ /',__\\ \  _ `\/\ \/\ '__`\
+    \ \ \L\ \/\ \L\.\_\ \ \_\ \ \_ \_\ \_/\  __//\__, `\\ \ \ \ \ \ \ \ \L\ \\
+     \ \____/\ \__/.\_\\ \__\\ \__\/\____\ \____\/\____/ \ \_\ \_\ \_\ \ ,__/
+      \/___/  \/__/\/_/ \/__/ \/__/\/____/\/____/\/___/   \/_/\/_/\/_/\ \ \/
+                                                                       \ \_\
+
+        Welcome to Battleship!
+
+        1. Start Game
+        2. Rules
+        3. Exit
+    """  # noqa violation_error
+    )
+
+
+# Main Menu
+def main():
+    show_start_menu()
+    while True:
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            start_game()
+        elif choice == "2":
+            display_rules()
+        elif choice == "3":
+            print("Thanks for playing Battleship!")
+            sys.exit()
+        else:
+            print("Invalid choice. Try again.")
 
 
 # If the program is run (instead of imported), run the game:
