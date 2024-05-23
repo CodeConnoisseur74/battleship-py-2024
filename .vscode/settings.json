@@ -69,8 +69,17 @@
    "editor.formatOnType": false,
    "autoDocstring.startOnNewLine": true,
    "terminal.integrated.mouseWheelZoom": true,
-   "editor.defaultFormatter": "charliermarsh.ruff",
+   "editor.defaultFormatter": null,
    "[html]": {
       "editor.defaultFormatter": "vscode.html-language-features"
    },
+   "ruff.lint.enable": false,
+   "ruff.lineLength": 79,
+   "ruff.enable": false,
+   "ruff.fixAll": false,
+   "ruff.codeAction.fixViolation": {
+      "enable": false
+   },
+   "ruff.ignoreStandardLibrary": false,
+   "git.allowNoVerifyCommit": true,
 }
