@@ -5,7 +5,7 @@ import types
 from colorama import Fore, Style, init
 
 # Initialize colorama
-init()
+init(autoreset=True)
 
 # Constants
 consts = types.SimpleNamespace()
@@ -35,16 +35,16 @@ def convert_numeric_to_alphabetic(numeric: int):
 def format_cell(cell: str, show_ships) -> str:
     match cell:
         case consts.CHAR_HIT:
-            return Fore.RED + cell + Style.RESET_ALL
+            return Style.BRIGHT + Fore.RED + cell + Style.RESET_ALL
         case consts.CHAR_MISS:
-            return Fore.WHITE + cell + Style.RESET_ALL
+            return Style.BRIGHT + Fore.WHITE + cell + Style.RESET_ALL
         case consts.CHAR_WATER:
-            return Fore.CYAN + cell + Style.RESET_ALL
+            return Fore.BLUE + cell + Style.RESET_ALL
         case _:
             return (
-                Fore.BLUE + cell + Style.RESET_ALL
+                Fore.CYAN + cell + Style.RESET_ALL
                 if show_ships
-                else Fore.CYAN + consts.CHAR_WATER + Style.RESET_ALL
+                else Fore.BLUE + consts.CHAR_WATER + Style.RESET_ALL
             )
 
 
@@ -337,7 +337,7 @@ def display_rules():
 # Function to show the start menu
 def show_start_menu():
     print(
-        r"""
+        rf"""{Style.BRIGHT + Fore.LIGHTCYAN_EX}
    ____              __    __    ___                   __
   /\  _`\           /\ \__/\ \__/\_ \                 /\ \      __
   \ \ \L\ \     __  \ \ ,_\ \ ,_\//\ \      __    ____\ \ \___ /\_\  _____
@@ -347,12 +347,13 @@ def show_start_menu():
       \/___/  \/__/\/_/ \/__/ \/__/\/____/\/____/\/___/   \/_/\/_/\/_/\ \ \/
                                                                        \ \_\
 
-        Welcome to Battleship!
+{Style.BRIGHT + Fore.LIGHTBLUE_EX}      Welcome to Battleship!{Style.RESET_ALL}
 
+{Style.BRIGHT + Fore.LIGHTGREEN_EX}
         1. Start Game
         2. Rules
         3. Exit
-    """  # noqa violation_error
+    {Style.RESET_ALL}"""
     )
 
 
@@ -376,4 +377,3 @@ def main():
 # If the program is run (instead of imported), run the game:
 if __name__ == "__main__":
     main()
-
