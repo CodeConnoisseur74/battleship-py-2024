@@ -2,7 +2,9 @@ import random
 import sys
 import types
 
-from colorama import Fore, Style, init
+from colorama import Fore
+from colorama import init
+from colorama import Style
 
 # Initialize colorama
 init(autoreset=True)

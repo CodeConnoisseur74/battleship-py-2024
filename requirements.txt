@@ -1,0 +1,15 @@
+cfgv==3.4.0
+click==8.1.7
+colorama==0.4.6
+distlib==0.3.8
+filelock==3.14.0
+identify==2.5.36
+nodeenv==1.8.0
+pathspec==0.12.1
+platformdirs==4.2.2
+pre-commit==3.7.1
+pycodestyle==2.11.1
+PyYAML==6.0.1
+ruff==0.4.4
+tomli==2.0.1
+virtualenv==20.26.2

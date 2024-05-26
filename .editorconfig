@@ -6,7 +6,11 @@ root = true
 [*]
 indent_style = space
 indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
 end_of_line = lf
 charset = utf-8
-trim_trailing_whitespace = false
-insert_final_newline = true
+max_line_length = 79
+
+[*.{css,html,js,json,jsx,scss,ts,tsx,yaml,yml}]
+indent_size = 2
