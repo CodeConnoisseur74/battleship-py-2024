@@ -7,7 +7,6 @@ from colorama import Fore, Style, init
 # Initialize colorama
 init(autoreset=True)
 
-
 # Constants
 consts = types.SimpleNamespace()
 consts.CHAR_HIT = "X"
@@ -21,6 +20,11 @@ consts.SHIP_TYPES = {
     "Destroyer": 3,
     "Patrol Boat": 2,
 }
+
+
+# Helper function to print text in bright cyan
+def bright_cyan(text):
+    return f"{Style.BRIGHT}{Fore.CYAN}{text}{Style.RESET_ALL}"
 
 
 # Function to convert alphabetic y-coordinate to numeric coordinate
@@ -92,7 +96,8 @@ def place_ships(board):
                     placed = True
 
         if not placed:
-            print(f"Failed to place {ship} after {attempts} attempts.")
+            # print(f"{Style.BRIGHT}{Fore.CYAN}Failed to place {ship} after {attempts} attempts.{Style.RESET_ALL}")
+            print(bright_cyan(f"Failed to place {ship} after {attempts} attempts."))
 
 
 # Check if the placement is correct
@@ -111,12 +116,12 @@ def count_ships(board):
 
 # Function to print the player and computer boards side by side
 def print_board(player_board, computer_board):
-    print("  Player's Board            Computer's Board")
+    print(bright_cyan("  Player's Board            Computer's Board"))
     print(
-        "  "
-        + " ".join(str(i) for i in range(consts.BOARD_SIZE))
-        + "       "
-        + " ".join(str(i) for i in range(consts.BOARD_SIZE))
+        bright_cyan("  ")
+        + bright_cyan(" ".join(str(i) for i in range(consts.BOARD_SIZE)))
+        + bright_cyan("       ")
+        + bright_cyan(" ".join(str(i) for i in range(consts.BOARD_SIZE)))
     )
     for i, (player_row, computer_row) in enumerate(
         zip(player_board, computer_board)
@@ -127,11 +132,11 @@ def print_board(player_board, computer_board):
         ]
 
         print(
-            convert_numeric_to_alphabetic(i)
+            bright_cyan(convert_numeric_to_alphabetic(i))
             + " "
             + " ".join(player_row_display)
-            + "     "
-            + convert_numeric_to_alphabetic(i)
+            + bright_cyan("     ")
+            + bright_cyan(convert_numeric_to_alphabetic(i))
             + " "
             + " ".join(computer_row_display)
         )
@@ -167,17 +172,17 @@ def start_game():
         print_board(player_board, computer_board)
 
         # Player's Move
-        print("Player's Move")
+        print(bright_cyan("Player's Move"))
         player_shot_valid = False
         while not player_shot_valid:
             try:
                 y_input = (
-                    input("Enter y-coordinate (A-J): or 'Exit' to quit: ")
+                    input(bright_cyan("Enter y-coordinate (A-J): or 'Exit' to quit: "))
                     .strip()
                     .upper()
                 )
                 if y_input == "EXIT":
-                    print("Thanks for playing Battleship!")
+                    print(bright_cyan("Thanks for playing Battleship!"))
                     sys.exit()
 
                 # Validate the y-coordinate input
@@ -185,43 +190,30 @@ def start_game():
                     y = convert_alphabetic_to_numeric(y_input)
                 else:
                     print(
-                        """
-                        Please enter a single letter from A to J for
-                        the y-coordinate.
-                        """
-                    )
+                        bright_cyan("Please enter a single letter from A to J for the y-coordinate."))
                     continue
 
                 x_input = (
-                    input("Enter x-coordinate (0-9): or type 'exit' to quit: ")
+                    input(bright_cyan("Enter x-coordinate (0-9): or type 'exit' to quit: "))
                     .strip()
                     .upper()
                 )
                 if x_input == "EXIT":
-                    print("Thanks for playing Battleship!")
+                    print(bright_cyan("Thanks for playing Battleship!"))
                     sys.exit()
                 try:
                     x = int(x_input)
                 except ValueError:
                     print(
-                        """
-                        Invalid x-coordinate. Please enter a number
-                        from 0 to 9.
-                        """
-                    )
+                        bright_cyan("Invalid x-coordinate. Please enter a number from 0 to 9."))
                     continue
 
                 if not is_valid_position(x, y):
-                    print("Coordinates out of bounds. Try again.")
+                    print(bright_cyan("Coordinates out of bounds. Try again."))
                     continue
 
                 if (x, y) in used_coordinates:
-                    print(
-                        """
-                        You have already used this coordinate.
-                        Try a different one.
-                        """
-                    )
+                    print(bright_cyan("You have already used this coordinate. Try a different one."))
                     continue
 
                 used_coordinates.append((x, y))
@@ -232,17 +224,12 @@ def start_game():
                         consts.CHAR_HIT,
                         consts.CHAR_MISS,
                     ]:
-                        print("HIT!")
+                        print("Hit!")
                         computer_board[y][x] = consts.CHAR_HIT
                     else:
-                        print(
-                            """
-                            Coordinate already targeted.
-                            Choose different coordinates.
-                            """
-                        )
+                        print(bright_cyan("Coordinate already targeted. Choose different coordinates."))
                 else:
-                    print("MISSED!")
+                    print(bright_cyan("Miss!"))
                     computer_board[y][x] = consts.CHAR_MISS
 
                 if all(
@@ -257,14 +244,14 @@ def start_game():
                     ]
                 ):
                     print_board(player_board, computer_board)
-                    print("Congratulations! You won!")
+                    print(bright_cyan("Congratulations! You won!"))
                     sys.exit()
 
             except ValueError as e:
                 print(e)
 
             # Computer's move
-            print("Computer's Move")
+            print(bright_cyan("Computer's Move"))
             computer_shot_valid = False
             while not computer_shot_valid:
                 x, y = (
@@ -274,11 +261,9 @@ def start_game():
                 if (x, y) not in used_coordinates_computer:
                     used_coordinates_computer.append((x, y))
                     computer_shot_valid = True
-                    print(
-                        f"""
-                Computer targeted {convert_numeric_to_alphabetic(y)}{x}
-                """
-                    )
+                    print(bright_cyan(
+                    f"Computer targeted {convert_numeric_to_alphabetic(y)}{x}"
+                ))
 
             # Check for hit or miss
             if player_board[y][x] not in [
@@ -286,18 +271,14 @@ def start_game():
                 consts.CHAR_HIT,
                 consts.CHAR_MISS,
             ]:
-                print(
-                    f"""
-            Computer HIT your ship at {convert_numeric_to_alphabetic(y)}{x}!
-            """
-                )
+                print(bright_cyan(
+                    f"Computer hit your ship at {convert_numeric_to_alphabetic(y)}{x}!"
+                ))
                 player_board[y][x] = consts.CHAR_HIT
             else:
-                print(
-                    f"""
-            Computer MISSED at {convert_numeric_to_alphabetic(y)}{x}!
-            """
-                )
+                print(bright_cyan(
+                    f"Computer missed at {convert_numeric_to_alphabetic(y)}{x}!"
+                ))
                 player_board[y][x] = consts.CHAR_MISS
 
             # Check if computer has won
@@ -309,14 +290,14 @@ def start_game():
                 not in [consts.CHAR_WATER, consts.CHAR_MISS, consts.CHAR_HIT]
             ):
                 print_board(player_board, computer_board)
-                print("Game Over! Computer won!")
+                print(bright_cyan("Game Over! Computer won!"))
                 sys.exit()
 
 
 # Function to display game rules
 def display_rules():
-    rules = """
-    BATTLESHIP GAME RULES:
+    rules = rf"""
+    {Style.BRIGHT}{Fore.CYAN}BATTLESHIP GAME RULES:
 
     1. The game is played on a 10x10 grid.
     2. Each player has a fleet of 5 ships to place on their board.
@@ -324,12 +305,13 @@ def display_rules():
         Destroyer (3), and Patrol Boat (2).
     3. Players take turns guessing the coordinates to attack on the opponent's
         board.
-    4. If a player's guess hits a ship, it's a "HIT!" and the opponent marks
+    4. If a player's guess hits a ship, it's a "Hit!" and the opponent marks
         it as such.
-        If it misses, it's a "MISS!" and the opponent marks it as such.
+        If it misses, it's a "Miss!" and the opponent marks it as such.
     5. The first player to sink all of the opponent's ships wins the game.
 
     Have fun playing Battleship!
+    {Style.RESET_ALL}
     """  # noqa violation_error
 
     print(rules)
@@ -347,10 +329,8 @@ def show_start_menu():
      \ \____/\ \__/.\_\\ \__\\ \__\/\____\ \____\/\____/ \ \_\ \_\ \_\ \ ,__/
       \/___/  \/__/\/_/ \/__/ \/__/\/____/\/____/\/___/   \/_/\/_/\/_/\ \ \/
                                                                        \ \_\
+        Welcome to Battleship!
 
-    Welcome to Battleship!
-
-{Style.BRIGHT + Fore.LIGHTWHITE_EX}
         1. Start Game
         2. Rules
         3. Exit

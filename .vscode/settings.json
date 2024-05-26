@@ -63,7 +63,7 @@
    "evenBetterToml.formatter.columnWidth": 1,
    "code-runner.clearPreviousOutput": true,
    "glassit-linux.opacity": 90,
-   "editor.minimap.enabled": true,
+   "editor.minimap.enabled": false,
    "python.analysis.inlayHints.callArgumentNames": "off",
    "ruff.showNotifications": "always",
    "editor.formatOnType": false,
@@ -82,4 +82,5 @@
    },
    "ruff.ignoreStandardLibrary": false,
    "git.allowNoVerifyCommit": true,
+   "editor.unicodeHighlight.ambiguousCharacters": true,
 }
