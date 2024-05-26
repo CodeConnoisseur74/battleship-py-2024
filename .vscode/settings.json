@@ -63,7 +63,7 @@
    "evenBetterToml.formatter.columnWidth": 1,
    "code-runner.clearPreviousOutput": true,
    "glassit-linux.opacity": 90,
-   "editor.minimap.enabled": false,
+   "editor.minimap.enabled": true,
    "python.analysis.inlayHints.callArgumentNames": "off",
    "ruff.showNotifications": "always",
    "editor.formatOnType": false,
