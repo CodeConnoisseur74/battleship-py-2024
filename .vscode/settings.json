@@ -80,4 +80,8 @@
    "ruff.ignoreStandardLibrary": true,
    "git.allowNoVerifyCommit": true,
    "editor.unicodeHighlight.ambiguousCharacters": true,
+   "editor.fontLigatures": true,
+   "[jsonc]": {
+      "editor.defaultFormatter": "vscode.json-language-features"
+   },
 }
