@@ -1,8 +1,8 @@
 # **BATTLESHIP PY**
 
-![Live Project Mockup](https://ui.dev/amiresponsive?url=https://battleship-py-2024.herokuapp.com/)
+![Live Project Mockup](https://ui.dev/amiresponsive?url=https://battleship-py-2024-04ee4b5ff686.herokuapp.com/)
 
-[Link to Live Project](https://battleship-py.herokuapp.com/)
+[Link to Live Project](https://battleship-py-2024-04ee4b5ff686.herokuapp.com/)
 
 ## Table of Contents
 
